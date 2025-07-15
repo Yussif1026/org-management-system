@@ -1,0 +1,73 @@
+<body>
+  <!-- Registration Section -->
+  <div id="register-section" style="margin-bottom:20px;">
+    <input id="register-fullname" placeholder="Full Name">
+    <input id="register-email" placeholder="Email">
+    <input id="register-phone" placeholder="Phone (optional)">
+    <input id="register-password" type="password" placeholder="Password">
+    <button onclick="register()">Register</button>
+  </div>
+
+  <!-- Login Section -->
+  <div id="login-section" style="margin-bottom:20px;">
+    <input id="login-email" placeholder="Email">
+    <input id="login-password" type="password" placeholder="Password">
+    <button onclick="login()">Login</button>
+  </div>
+  <button id="logout-btn" onclick="logout()" style="display:none; margin-bottom:20px;">Logout</button>
+
+  <h1>Welcome, Member!</h1>
+
+  <!-- Announcements / Events section -->
+  <div id="events-section">
+    <h2>Announcements / Events</h2>
+    <ul id="events-list"></ul>
+  </div>
+
+  <div id="totals"></div>
+  <table id="history-table" border="1">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Amount (GHC)</th>
+        <th>Event Type</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <!-- Pay Now section -->
+  <div style="margin-top: 20px;">
+    <button onclick="payMonthly()">Pay Monthly (GHC 20)</button>
+    <button onclick="payOccasion()">Pay for Occasion (GHC 50)</button>
+    <select id="occasion-type">
+      <option value="naming">Naming Ceremony</option>
+      <option value="engagement">Engagement</option>
+      <option value="wedding">Wedding</option>
+      <option value="paternal_funeral">Paternal Funeral</option>
+      <option value="maternal_funeral">Maternal Funeral</option>
+      <option value="critical_funeral">Critical Funeral</option>
+    </select>
+  </div>
+
+  <!-- ADMIN: Create Event section (hidden for regular users) -->
+  <div id="admin-event-section" style="display:none; margin-top:30px; border:1px solid #aaa; padding:16px;">
+    <h2>Create New Event/Announcement (Admins only)</h2>
+    <input id="event-title" placeholder="Title"><br>
+    <textarea id="event-description" placeholder="Description"></textarea><br>
+    <select id="event-type">
+      <option value="naming">Naming Ceremony</option>
+      <option value="engagement">Engagement</option>
+      <option value="wedding">Wedding</option>
+      <option value="paternal_funeral">Paternal Funeral</option>
+      <option value="maternal_funeral">Maternal Funeral</option>
+      <option value="critical_funeral">Critical Funeral</option>
+      <option value="announcement">Announcement</option>
+    </select><br>
+    <input id="event-date" type="datetime-local" placeholder="Date/Time"><br>
+    <button onclick="createEvent()">Create Event</button>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
