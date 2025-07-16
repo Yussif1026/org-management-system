@@ -8,6 +8,7 @@ const userSchema = new mongoose.Schema({
   registrationDate: { type: Date, default: Date.now },
   totalMonthlyContributions: { type: Number, default: 0 },
   totalOccasionContributions: { type: Number, default: 0 },
+  // Role-based access: "admin" or "member"
   role: { type: String, enum: ['member', 'admin'], default: 'member' }
 });
 

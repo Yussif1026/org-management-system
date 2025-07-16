@@ -3,7 +3,7 @@ const router = express.Router();
 const eventController = require('../controllers/eventController');
 const authMiddleware = require('../middleware/authMiddleware');
 
-// List events (public for members)
+// List all events (public for all members)
 router.get('/', eventController.listEvents);
 
 // Create event (admin only)

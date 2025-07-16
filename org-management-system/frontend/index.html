@@ -18,6 +18,12 @@
 
   <h1>Welcome, Member!</h1>
 
+  <!-- Member Profile (shown only when logged in) -->
+  <div id="profile-section" style="display:none; margin-bottom:20px; border:1px solid #bbb; padding:10px;">
+    <h3>Your Profile</h3>
+    <div id="profile-info"></div>
+  </div>
+
   <!-- Announcements / Events section -->
   <div id="events-section">
     <h2>Announcements / Events</h2>
@@ -49,6 +55,22 @@
       <option value="maternal_funeral">Maternal Funeral</option>
       <option value="critical_funeral">Critical Funeral</option>
     </select>
+  </div>
+
+  <!-- ADMIN: Member List Section (Admins only) -->
+  <div id="admin-members-section" style="display:none; margin-top:30px; border:1px solid #aaa; padding:16px;">
+    <h2>All Members (Admins only)</h2>
+    <table border="1" id="members-table">
+      <thead>
+        <tr>
+          <th>Full Name</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Date Joined</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
   </div>
 
   <!-- ADMIN: Create Event section (hidden for regular users) -->

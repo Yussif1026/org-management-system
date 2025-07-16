@@ -90,7 +90,7 @@ exports.verifyPayment = async (req, res) => {
 
 // PAYSTACK WEBHOOK HANDLER - ADD THIS
 exports.paystackWebhook = async (req, res) => {
-  const secret = process.env.PAYSTACK_SECRET_KEY; // Use your .env secret
+  const secret = process.env.PAYSTACK_SECRET_KEY;
   const hash = crypto.createHmac('sha512', secret)
     .update(req.body)
     .digest('hex');
@@ -103,10 +103,8 @@ exports.paystackWebhook = async (req, res) => {
   const event = JSON.parse(req.body);
 
   if (event.event === 'charge.success') {
-    // 1. Check if payment is already logged
     const existing = await Payment.findOne({ paystackRef: event.data.reference });
     if (!existing) {
-      // 2. Log payment
       const payment = new Payment({
         user: event.data.metadata.userId,
         type: event.data.metadata.type,
@@ -116,7 +114,6 @@ exports.paystackWebhook = async (req, res) => {
       });
       await payment.save();
 
-      // 3. Update user's contributions
       const user = await User.findById(event.data.metadata.userId);
       if (event.data.metadata.type === 'monthly') {
         user.totalMonthlyContributions += event.data.amount / 100;
@@ -124,9 +121,32 @@ exports.paystackWebhook = async (req, res) => {
         user.totalOccasionContributions += event.data.amount / 100;
       }
       await user.save();
-      // Optionally: send notification here
     }
-    // Else: already logged, do nothing
   }
   res.sendStatus(200);
+};
+
+// GET: Payment history for a user
+exports.getPaymentHistory = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const history = await Payment.find({ user: userId }).sort({ date: -1 });
+    res.json(history);
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to get payment history', error: err.message });
+  }
+};
+
+// GET: Payment totals for a user
+exports.getPaymentTotals = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const user = await User.findById(userId);
+    res.json({
+      totalMonthlyContributions: user.totalMonthlyContributions || 0,
+      totalOccasionContributions: user.totalOccasionContributions || 0
+    });
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to get payment totals', error: err.message });
+  }
 };

@@ -12,7 +12,6 @@ exports.listEvents = async (req, res) => {
 
 // Create event (admin only)
 exports.createEvent = async (req, res) => {
-  // Only admins can create events
   if (!req.user.isAdmin) {
     return res.status(403).json({ message: 'Admins only can create events' });
   }
@@ -23,7 +22,7 @@ exports.createEvent = async (req, res) => {
       description,
       eventType,
       date,
-      createdBy: req.user.userId // from auth middleware
+      createdBy: req.user.userId
     });
     await event.save();
     res.status(201).json({ message: 'Event created', event });
@@ -34,7 +33,6 @@ exports.createEvent = async (req, res) => {
 
 // Delete event (admin only)
 exports.deleteEvent = async (req, res) => {
-  // Only admins can delete events
   if (!req.user.isAdmin) {
     return res.status(403).json({ message: 'Admins only can delete events' });
   }

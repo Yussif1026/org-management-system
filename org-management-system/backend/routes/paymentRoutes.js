@@ -10,13 +10,16 @@ router.get('/verify', paymentController.verifyPayment);
 router.post('/verify', paymentController.verifyPayment);
 
 // WEBHOOK: Paystack will POST here for payment notifications
-// NOTE: This line MUST come BEFORE exporting router
 router.post(
   '/webhook',
   express.raw({ type: 'application/json' }),
   paymentController.paystackWebhook
 );
 
-// ... your other payment routes (logging, history, totals)
+// GET: Payment history for a user
+router.get('/history/:userId', paymentController.getPaymentHistory);
+
+// GET: Payment totals for a user
+router.get('/totals/:userId', paymentController.getPaymentTotals);
 
 module.exports = router;
