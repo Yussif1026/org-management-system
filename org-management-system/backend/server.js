@@ -11,8 +11,15 @@ connectDB();
 
 const app = express();
 
-// Middleware
-app.use(cors());
+// ===== CORS CONFIGURATION (UPDATE THIS BLOCK) =====
+app.use(cors({
+  origin: [
+    'https://your-frontend-url.onrender.com', // <-- REPLACE with your actual frontend Render URL
+    'http://localhost:5500',                  // <-- For local dev if you use Live Server
+  ],
+  credentials: true
+}));
+
 app.use(express.json());
 
 // ===== ROUTES =====

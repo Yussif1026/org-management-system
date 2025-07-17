@@ -1,3 +1,5 @@
+const API_BASE = "https://org-management-system.onrender.com/api"; // <-- CHANGE THIS to your Render backend URL
+
 // --- REGISTRATION LOGIC ---
 async function register() {
   const fullName = document.getElementById('register-fullname').value;
@@ -10,7 +12,7 @@ async function register() {
     return;
   }
 
-  const res = await fetch('http://localhost:5000/api/auth/register', {
+  const res = await fetch(`${API_BASE}/auth/register`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ fullName, email, password, phone })
@@ -32,7 +34,7 @@ window.register = register;
 async function login() {
   const email = document.getElementById('login-email').value;
   const password = document.getElementById('login-password').value;
-  const res = await fetch('http://localhost:5000/api/auth/login', {
+  const res = await fetch(`${API_BASE}/auth/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email, password })
@@ -61,12 +63,12 @@ async function fetchPaymentHistoryAndTotals() {
   const userId = localStorage.getItem('userId');
   const token = localStorage.getItem('token');
   if (!userId || !token) return;
-  const historyResponse = await fetch(`http://localhost:5000/api/payments/history/${userId}`, {
+  const historyResponse = await fetch(`${API_BASE}/payments/history/${userId}`, {
     headers: { 'Authorization': 'Bearer ' + token }
   });
   const history = await historyResponse.json();
 
-  const totalsResponse = await fetch(`http://localhost:5000/api/payments/totals/${userId}`, {
+  const totalsResponse = await fetch(`${API_BASE}/payments/totals/${userId}`, {
     headers: { 'Authorization': 'Bearer ' + token }
   });
   const totals = await totalsResponse.json();
@@ -90,7 +92,7 @@ window.fetchPaymentHistoryAndTotals = fetchPaymentHistoryAndTotals;
 
 // --- FETCH AND DISPLAY EVENTS/ANNOUNCEMENTS (with delete for admin) ---
 async function fetchAndDisplayEvents() {
-  const res = await fetch('http://localhost:5000/api/events');
+  const res = await fetch(`${API_BASE}/events`);
   const events = await res.json();
   const list = document.getElementById('events-list');
   const role = localStorage.getItem('role');
@@ -115,7 +117,7 @@ async function deleteEvent(eventId) {
   const token = localStorage.getItem('token');
   if (!token) return;
   if (!confirm('Are you sure you want to delete this event?')) return;
-  const res = await fetch(`http://localhost:5000/api/events/${eventId}`, {
+  const res = await fetch(`${API_BASE}/events/${eventId}`, {
     method: 'DELETE',
     headers: {
       'Authorization': 'Bearer ' + token
@@ -143,7 +145,7 @@ async function createEvent() {
     alert('Title and date are required.');
     return;
   }
-  const res = await fetch('http://localhost:5000/api/events', {
+  const res = await fetch(`${API_BASE}/events`, {
     method: 'POST',
     headers: {
       'Authorization': 'Bearer ' + token,
@@ -171,7 +173,7 @@ async function fetchAllMembers() {
   const role = localStorage.getItem('role');
   if (!token || role !== "admin") return;
 
-  const res = await fetch('http://localhost:5000/api/auth/members', {
+  const res = await fetch(`${API_BASE}/auth/members`, {
     headers: { 'Authorization': 'Bearer ' + token }
   });
   const users = await res.json();
@@ -196,7 +198,7 @@ async function fetchMyProfile() {
   const userId = localStorage.getItem('userId');
   const token = localStorage.getItem('token');
   if (!userId || !token) return;
-  const res = await fetch(`http://localhost:5000/api/auth/profile/${userId}`, {
+  const res = await fetch(`${API_BASE}/auth/profile/${userId}`, {
     headers: { 'Authorization': 'Bearer ' + token }
   });
   const user = await res.json();
@@ -221,7 +223,7 @@ async function initiatePayment(type, amount, eventType = null) {
   const payload = { userId, type, amount };
   if (eventType) payload.eventType = eventType;
 
-  const response = await fetch('http://localhost:5000/api/payments/initiate', {
+  const response = await fetch(`${API_BASE}/payments/initiate`, {
     method: 'POST',
     headers: {
       'Authorization': 'Bearer ' + token,
