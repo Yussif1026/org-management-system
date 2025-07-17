@@ -1,4 +1,5 @@
-const API_BASE = "https://org-management-system.onrender.com/api"; // <-- CHANGE THIS to your Render backend URL
+// CHANGE THIS TO YOUR ACTUAL BACKEND URL
+const API_BASE = "https://org-management-system-backend.onrender.com/api";
 
 // --- REGISTRATION LOGIC ---
 async function register() {
