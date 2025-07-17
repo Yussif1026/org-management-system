@@ -11,11 +11,11 @@ connectDB();
 
 const app = express();
 
-// ===== CORS CONFIGURATION (UPDATE THIS BLOCK) =====
+// ===== CORS CONFIGURATION (PRODUCTION + LOCAL) =====
 app.use(cors({
   origin: [
-    'https://your-frontend-url.onrender.com', // <-- REPLACE with your actual frontend Render URL
-    'http://localhost:5500',                  // <-- For local dev if you use Live Server
+    'https://org-management-system-1.onrender.com', // Your deployed frontend URL
+    'http://localhost:5500'                         // Local dev (optional, for your own testing)
   ],
   credentials: true
 }));
@@ -33,7 +33,6 @@ app.use('/api/auth', authRoutes);
 const paymentRoutes = require('./routes/paymentRoutes');
 app.use('/api/payments', paymentRoutes);
 
-// ======= EVENT ROUTES (new) =======
 const eventRoutes = require('./routes/eventRoutes');
 app.use('/api/events', eventRoutes);
 
@@ -43,7 +42,7 @@ app.use((err, req, res, next) => {
   res.status(500).json({ message: 'Server error', error: err.message });
 });
 
-// Start server
+// ===== START SERVER =====
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
