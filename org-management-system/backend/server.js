@@ -3,7 +3,7 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db');
 
-// Load environment variables from .env
+// Load environment variables
 dotenv.config();
 
 // Connect to MongoDB Atlas
@@ -11,14 +11,28 @@ connectDB();
 
 const app = express();
 
-// ===== CORS CONFIGURATION (PRODUCTION + LOCAL) =====
+// ===== CORS CONFIGURATION (PRODUCTION + LOCAL TESTING) =====
+const allowedOrigins = [
+  'https://org-management-system-1.onrender.com', // Deployed frontend
+  'http://localhost:5500' // Local dev (for you)
+];
+
 app.use(cors({
-  origin: [
-    'https://org-management-system-1.onrender.com', // Your deployed frontend URL
-    'http://localhost:5500'                         // Local dev (optional, for your own testing)
-  ],
-  credentials: true
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like Postman) or if in the whitelist
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('CORS not allowed from this origin'));
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
+
+// Handle preflight (OPTIONS) requests for all routes
+app.options('*', cors());
 
 app.use(express.json());
 
@@ -36,7 +50,7 @@ app.use('/api/payments', paymentRoutes);
 const eventRoutes = require('./routes/eventRoutes');
 app.use('/api/events', eventRoutes);
 
-// ===== ERROR HANDLER (Optional, for production) =====
+// ===== ERROR HANDLER =====
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ message: 'Server error', error: err.message });
